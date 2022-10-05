@@ -177,6 +177,56 @@ https://blog.csdn.net/baidu_41833099/article/details/121707175?spm=1001.2101.300
 
 
 
+## MapReduce Design
+
+#### Job 1
+
+每一个Mapper的Input是一个`.txt`，也就是一个章节（因为最后要以chapter作为分析的单元，我们要保证在相同chapter中出现的人有着相同的`chapter key`）。
+
+在Job 1里，用OpenNLP自带的模型（分词器和NameFinder），找到人名。
+
+
+
+##### Mapper1 
+
+Output Key: `Text`， 形式为(以`\t`为分隔符)
+
+```java
+"bookname\tchaptername\tcharctername"
+```
+
+Output Value: `appearTimeNeighbor`（自定义Class，包含了出现次数和邻居的名字）
+
+
+
+##### Reducer1
+
+将`appearTimeNeighbor`类型的value相加，出现次数直接相加，邻居的相加进行去重处理。
+
+
+
+#### Job 2
+
+以（每一本书、角色名）为单位，输出该角色的信息。
+
+**角色信息：**出现总次数`sum`，平均每一章节出现的次数`mean`，各章节出现次数的标准差`std`，各章节出现次数的极差`range`，角色的邻居`neighbor`
+
+
+
+#### Job 3
+
+给角色信息的各项指标做加权处理，算出每一个角色的得分。
+
+其中，对每一本书做了relationship network分析，用PageRank算法计算了每个节点（角色）的rank。
+
+
+
+#### Job 4
+
+利用最小堆，找到每本书Top 3的重要人物。
+
+
+
 ## Debugging
 
 #### Writable类
