@@ -1,5 +1,7 @@
 # hadoopPro1Q2
- Find important characters based on appear times per chapter and the relationship network
+ Find important characters based on appear times per chapter and the relationship network.
+ 
+ Note that there are some **absolute paths** in this project!
 
 
 
